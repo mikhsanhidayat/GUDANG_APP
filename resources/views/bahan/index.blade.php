@@ -394,4 +394,5 @@
 
         // ... (Logika Modal dan lainnya tetap sama di bawah) ...
     </script>
+    
 </x-app-layout>
