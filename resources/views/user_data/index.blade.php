@@ -1,173 +1,213 @@
 <x-app-layout>
-    <div class="bg-[#2A446C] min-h-screen pl-72 pt-40">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="w-full">
-
-                <div class="flex justify-start text-2xl mb-6">
-                    <h1 class="text-white text-3xl font-bold">Daftar User</h1>
+    <div class="w-full">
+        <div class="w-full">
+            @can('create', $item = new App\Models\User())
+                <div class="mb-4">
+                    <button class="create-btn inline-flex items-center justify-center rounded-xl bg-brand-500 px-5 py-3 text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700">
+                        <i class="ti ti-plus mr-2"></i> Tambah User
+                    </button>
                 </div>
+            @endcan
 
-                @can('create', $item = new App\Models\User())
-                    <div class="flex justify-start text-2xl mb-6">
-                        <a href="{{ route('users.create') }}"
-                            class="bg-blue-600 hover:bg-blue-700 rounded-xl text-white font-bold py-2 px-4 shadow-lg">
-                            Tambah User
-                        </a>
+            <div class="horizon-card w-full p-4 overflow-hidden">
+                <div class="flex flex-col md:flex-row items-center justify-between pb-4 border-b border-gray-100 mb-4 gap-4">
+                    <h5 class="text-xl font-bold text-navy-700">Data User</h5>
+                    <div class="flex items-center gap-2 w-full md:w-auto">
+                        <div class="flex h-10 items-center rounded-full bg-lightPrimary text-navy-700 w-full md:w-[250px]">
+                            <p class="pl-3 pr-2 text-xl">
+                                <i class="ti ti-search h-4 w-4 text-gray-400"></i>
+                            </p>
+                            <input type="text" id="search-user" placeholder="Cari User..." class="block h-full w-full rounded-full bg-lightPrimary text-sm font-medium text-navy-700 outline-none placeholder:!text-gray-400 border-none focus:ring-0" />
+                        </div>
                     </div>
-                @endcan
-
-                <div class="mb-8 w-1/3">
-                    <input type="text" id="search-user" placeholder="Cari User..."
-                        class="w-full p-3 rounded-lg bg-[#FFFFFF33] text-white border border-gray-600
-                               focus:ring-2 focus:ring-bl ue-500 placeholder-gray-400">
                 </div>
-
-                <div class="bg-white rounded-xl shadow-2xl overflow-hidden">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-200">
-                            <tr>
-                                <th class="px-6 py-2 text-center">No</th>
-                                <th class="px-6 py-2 text-center">Name</th>
-                                <th class="px-6 py-2 text-center">Email</th>
-                                <th class="px-6 py-2 text-center">Role</th>
-                                <th class="px-6 py-2 text-center">Created At</th>
-
-                                <th class="px-6 py-2 text-center">Aksi</th>
-
-
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-gray-200 text-left text-sm font-bold tracking-wide text-gray-600 uppercase">
+                                <th class="pb-3 px-4 text-center">No</th>
+                                <th class="pb-3 px-4 text-center">Name</th>
+                                <th class="pb-3 px-4 text-center">Email</th>
+                                <th class="pb-3 px-4 text-center">Role</th>
+                                <th class="pb-3 px-4 text-center">Created At</th>
+                                <th class="pb-3 px-4 text-center">Aksi</th>
                             </tr>
                         </thead>
-
-                        <tbody class="divide-y divide-gray-100">
+                        <tbody>
                             @foreach ($users as $user)
-                                {{-- Menambahkan border-b dan hover effect untuk konsistensi --}}
-                                <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                    {{-- Mengubah py-3 menjadi py-4 untuk space yang lebih lega --}}
-                                    <td class="text-center py-4 row-number-user">
-                                        {{ ($users->currentPage() - 1) * $users->perPage() + $loop->iteration }}
+                                <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                                    <td class="py-3 px-4 text-center text-sm text-navy-700 row-number-user">{{ ($users->currentPage() - 1) * $users->perPage() + $loop->iteration }}</td>
+                                    <td class="py-3 px-4 text-center text-sm font-bold text-navy-700">{{ $user->name }}</td>
+                                    <td class="py-3 px-4 text-center text-sm text-gray-600">{{ $user->email }}</td>
+                                    <td class="py-3 px-4 text-center text-sm">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold 
+                                            {{ $user->role == 'admin' ? 'bg-blue-100 text-blue-700' : ($user->role == 'pemilik' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700') }}">
+                                            {{ ucfirst($user->role ?? 'pegawai') }}
+                                        </span>
                                     </td>
-                                    <td class="text-center py-4">{{ $user->name }}</td>
-                                    <td class="text-center py-4">{{ $user->email }}</td>
-                                    <td class="text-center py-4">{{ ucfirst($user->role ?? 'pegawai') }}</td>
-                                    <td class="text-center py-4">{{ $user->created_at->format('d-m-Y') }}</td>
-
-                                    @can('lihat', $user)
-                                        <td class="text-center py-4">
-                                            {{-- TOMBOL EDIT --}}
-                                            <button
-                                                class="edit-user-btn bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-[2px] rounded-full"
-                                                data-id="{{ $user->id }}" data-name="{{ $user->name }}"
-                                                data-email="{{ $user->email }}">
+                                    <td class="py-3 px-4 text-center text-sm text-gray-600">{{ $user->created_at->format('d-m-Y') }}</td>
+                                    <td class="py-3 px-4 text-center flex flex-wrap justify-center gap-2">
+                                        @can('lihat', $user)
+                                            <button class="edit-user-btn inline-flex items-center justify-center rounded-lg bg-horizonGreen-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-600"
+                                                data-id="{{ $user->id }}" data-name="{{ $user->name }}" data-email="{{ $user->email }}">
                                                 Edit
                                             </button>
-
-                                            {{-- TOMBOL HAPUS --}}
-                                            <form action="{{ route('users.destroy', $user->id) }}" method="POST"
-                                                class="inline">
-                                                @csrf
-                                                @method('DELETE')
-
-                                                <button onclick="return confirm('Yakin hapus user ini?')"
-                                                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-[2px] rounded-full">
+                                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="inline-block m-0">
+                                                @csrf @method('DELETE')
+                                                <button onclick="return confirm('Yakin hapus user ini?')" class="inline-flex items-center justify-center rounded-lg bg-gray-800 px-3 py-1.5 text-xs font-medium text-white hover:bg-gray-900">
                                                     Hapus
                                                 </button>
                                             </form>
-                                        </td>
-                                    @endcan
+                                        @endcan
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-
-                    <div class="mt-4 px-4 pr-14 pb-4 pagination-custom">
-                        {{ $users->links() }}
-                    </div>
+                </div>
+                <div class="mt-4">
+                    {{ $users->links() }}
                 </div>
             </div>
         </div>
     </div>
 
-    {{-- ================= MODAL EDIT USER ================= --}}
-    <div id="edit-user-modal" class="fixed inset-0 hidden bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white w-1/3 rounded-lg shadow-lg p-6">
-            <h3 class="text-xl font-bold mb-4">Edit Data User</h3>
-
-            <form id="editUserForm" method="POST">
+    {{-- MODAL CREATE USER --}}
+    <div id="create-modal" class="fixed inset-0 z-[100] hidden items-center justify-center overflow-auto bg-black/40 backdrop-blur-sm p-4">
+        <div class="relative w-full max-w-lg rounded-[20px] bg-white shadow-3xl">
+            <form id="createForm" action="{{ route('users.store') }}" method="POST">
                 @csrf
-                @method('PUT')
-
-                <div class="mb-3">
-                    <label class="block text-sm font-medium text-gray-700">Nama User</label>
-                    <input type="text" name="name" id="modal_user_name"
-                        class="w-full border rounded p-2 focus:ring-blue-500 focus:border-blue-500" required>
+                <div class="flex items-center justify-between border-b border-gray-100 p-5">
+                    <h5 class="text-xl font-bold text-navy-700">Tambah User Baru</h5>
+                    <button type="button" class="close-modal text-gray-400 hover:text-gray-600"><i class="ti ti-x text-xl"></i></button>
                 </div>
-
-                <div class="mb-3">
-                    <label class="block text-sm font-medium text-gray-700">Email Address</label>
-                    <input type="email" name="email" id="modal_user_email"
-                        class="w-full border rounded p-2 focus:ring-blue-500 focus:border-blue-500" required>
+                <div class="p-5 max-h-[70vh] overflow-y-auto">
+                    <div class="mb-4">
+                        <label class="mb-2 block text-sm font-bold text-navy-700">Nama Lengkap</label>
+                        <input type="text" name="name" id="create_name" value="{{ old('name') }}"
+                            class="w-full rounded-xl border border-gray-200 p-3 text-sm outline-none focus:border-brand-500 focus:ring-0"
+                            placeholder="Masukkan nama lengkap" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="mb-2 block text-sm font-bold text-navy-700">Email (Username)</label>
+                        <input type="email" name="email" id="create_email" value="{{ old('email') }}"
+                            class="w-full rounded-xl border border-gray-200 p-3 text-sm outline-none focus:border-brand-500 focus:ring-0"
+                            placeholder="contoh@gmail.com" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="mb-2 block text-sm font-bold text-navy-700">Password</label>
+                        <input type="text" name="password" id="create_password" readonly
+                            class="w-full rounded-xl border border-gray-200 p-3 text-sm outline-none focus:border-brand-500 focus:ring-0 bg-gray-50 text-gray-500"
+                            placeholder="Akan otomatis terisi sama dengan email" required>
+                        <p class="mt-1 text-xs text-gray-400">*Password default disamakan dengan email</p>
+                    </div>
+                    <div class="mb-4">
+                        <label class="mb-2 block text-sm font-bold text-navy-700">Role / Hak Akses</label>
+                        <select name="role" class="w-full rounded-xl border border-gray-200 p-3 text-sm outline-none focus:border-brand-500 focus:ring-0" required>
+                            <option value="pegawai" {{ old('role') == 'pegawai' ? 'selected' : '' }}>Pegawai</option>
+                            <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                            <option value="pemilik" {{ old('role') == 'pemilik' ? 'selected' : '' }}>Pemilik</option>
+                        </select>
+                    </div>
                 </div>
-
-                <div class="flex justify-end gap-2 mt-6">
-                    <button type="button" id="closeUserModal"
-                        class="px-4 py-2 bg-gray-400 rounded text-white hover:bg-gray-500">
-                        Batal
-                    </button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 rounded text-white hover:bg-blue-700">
-                        Update User
-                    </button>
+                <div class="flex items-center justify-end border-t border-gray-100 p-5 gap-3">
+                    <button type="button" class="close-modal rounded-xl bg-gray-100 px-5 py-2.5 text-sm font-medium text-navy-700 hover:bg-gray-200">Batal</button>
+                    <button type="submit" class="rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600 shadow-md shadow-brand-500/30">Simpan User</button>
                 </div>
             </form>
         </div>
     </div>
 
-    {{-- SCRIPT SEARCH DENGAN RESET NOMOR --}}
-    <script>
-        document.getElementById('search-user').addEventListener('keyup', function() {
-            let filter = this.value.toLowerCase();
-            let visibleCount = 1; // Mulai hitung nomor dari 1
+    {{-- MODAL EDIT USER --}}
+    <div id="edit-user-modal" class="fixed inset-0 z-[100] hidden items-center justify-center overflow-auto bg-black/40 backdrop-blur-sm p-4">
+        <div class="relative w-full max-w-lg rounded-[20px] bg-white shadow-3xl">
+            <form id="editUserForm" method="POST">
+                @csrf @method('PUT')
+                <div class="flex items-center justify-between border-b border-gray-100 p-5">
+                    <h5 class="text-xl font-bold text-navy-700">Edit Data User</h5>
+                    <button type="button" class="close-modal text-gray-400 hover:text-gray-600"><i class="ti ti-x text-xl"></i></button>
+                </div>
+                <div class="p-5">
+                    <div class="mb-4">
+                        <label class="mb-2 block text-sm font-bold text-navy-700">Nama User</label>
+                        <input type="text" name="name" id="modal_user_name" class="w-full rounded-xl border border-gray-200 p-3 text-sm outline-none focus:border-brand-500 focus:ring-0" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="mb-2 block text-sm font-bold text-navy-700">Email Address</label>
+                        <input type="email" name="email" id="modal_user_email" class="w-full rounded-xl border border-gray-200 p-3 text-sm outline-none focus:border-brand-500 focus:ring-0" required>
+                    </div>
+                </div>
+                <div class="flex items-center justify-end border-t border-gray-100 p-5 gap-3">
+                    <button type="button" class="close-modal rounded-xl bg-gray-100 px-5 py-2.5 text-sm font-medium text-navy-700 hover:bg-gray-200">Batal</button>
+                    <button type="submit" class="rounded-xl bg-horizonGreen-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-600">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-            document.querySelectorAll('tbody tr').forEach(row => {
-                let textMatch = row.textContent.toLowerCase().includes(filter);
-                if (textMatch) {
-                    row.style.display = '';
-                    // Update nomor hanya pada baris yang tampil
-                    let numberCell = row.querySelector('.row-number-user');
-                    if (numberCell) {
-                        numberCell.textContent = visibleCount++;
+    @push('page-js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function openModal(id) {
+                const modal = document.getElementById(id);
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+            function closeModal(modal) {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }
+
+            document.querySelectorAll('.close-modal').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    closeModal(this.closest('.fixed'));
+                });
+            });
+
+            document.getElementById('search-user').addEventListener('keyup', function() {
+                let filter = this.value.toLowerCase();
+                let visibleCount = 1;
+
+                document.querySelectorAll('tbody tr').forEach(row => {
+                    let textMatch = row.textContent.toLowerCase().includes(filter);
+                    if (textMatch) {
+                        row.style.display = '';
+                        let numberCell = row.querySelector('.row-number-user');
+                        if (numberCell) numberCell.textContent = visibleCount++;
+                    } else {
+                        row.style.display = 'none';
                     }
-                } else {
-                    row.style.display = 'none';
-                }
+                });
             });
-        });
-    </script>
 
-    {{-- SCRIPT MODAL EDIT USER --}}
-    <script>
-        const editUserModal = document.getElementById('edit-user-modal');
-        const editUserButtons = document.querySelectorAll('.edit-user-btn');
-        const closeUserModal = document.getElementById('closeUserModal');
-        const editUserForm = document.getElementById('editUserForm');
+            const editUserForm = document.getElementById('editUserForm');
 
-        editUserButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.getElementById('modal_user_name').value = btn.dataset.name;
-                document.getElementById('modal_user_email').value = btn.dataset
-                .email; // Perbaikan ID disini
-                editUserForm.action = `/users/${btn.dataset.id}`;
-                editUserModal.classList.remove('hidden');
+            document.querySelectorAll('.edit-user-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.getElementById('modal_user_name').value = btn.dataset.name;
+                    document.getElementById('modal_user_email').value = btn.dataset.email;
+                    editUserForm.action = `/users/${btn.dataset.id}`;
+                    openModal('edit-user-modal');
+                });
             });
-        });
 
-        closeUserModal.addEventListener('click', () => {
-            editUserModal.classList.add('hidden');
-        });
+            // ===== CREATE MODAL =====
+            document.querySelectorAll('.create-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    openModal('create-modal');
+                });
+            });
 
-        window.addEventListener('click', (e) => {
-            if (e.target == editUserModal) {
-                editUserModal.classList.add('hidden');
+            const emailInput = document.getElementById('create_email');
+            const passwordInput = document.getElementById('create_password');
+
+            if (emailInput && passwordInput) {
+                emailInput.addEventListener('input', function() {
+                    passwordInput.value = this.value;
+                });
             }
         });
     </script>
+    @endpush
 </x-app-layout>

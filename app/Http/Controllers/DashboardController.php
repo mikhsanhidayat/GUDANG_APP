@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Models\bahan;
+use App\Models\Bahan;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -14,11 +14,11 @@ class DashboardController extends Controller
     public function index()
     {
         $totalProducts = Product::count();
-        $totalBahan = bahan::count();
+        $totalBahan = Bahan::count();
         $lowStockProducts = Product::where('stok_tersedia', '<=', 5)->count();
-        $lowStockBahan = bahan::where('stok_tersedia', '<=', 5)->count();
+        $lowStockBahan = Bahan::where('stok_tersedia', '<=', 5)->count();
         $lowStockProductList = Product::where('stok_tersedia', '<=', 5)->get();
-        $lowStockBahanList = bahan::where('stok_tersedia', '<=', 5)->get();
+        $lowStockBahanList = Bahan::where('stok_tersedia', '<=', 5)->get();
         return view('halamanutama.index', compact('totalProducts', 'totalBahan', 'lowStockProducts', 'lowStockBahan', 'lowStockProductList', 'lowStockBahanList'));
     }
 

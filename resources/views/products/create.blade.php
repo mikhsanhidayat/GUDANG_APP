@@ -1,126 +1,103 @@
 <x-app-layout>
-    <div class="bg-[#2A446C] min-h-screen pl-56 pt-44 py-8">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white rounded-xl shadow-2xl p-8">
-
-                <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">
-                    Tambah Produk Baru
-                </h1>
+    <div class="w-full flex justify-center">
+        <div class="w-full max-w-3xl">
+            <div class="horizon-card w-full p-8 mt-5">
+                <div class="flex items-center justify-between border-b border-gray-100 pb-4 mb-6">
+                    <h5 class="text-2xl font-bold text-navy-700">Tambah Produk Baru</h5>
+                </div>
 
                 <form action="{{ route('products.store') }}" method="POST" class="space-y-6">
                     @csrf
-
-                    {{-- KODE PRODUK (Readonly) --}}
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Kode Produk</label>
-                        <input type="text" readonly name="kode_produk" id="kode_produk"
-                            value="{{ old('kode_produk') }}"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 shadow-sm sm:text-sm"
-                            required>
-                        @error('kode_produk')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+                    
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="w-full">
+                            <label class="mb-2 block text-sm font-bold text-navy-700">Kode Produk</label>
+                            <input type="text" name="kode_produk" id="kode_produk" value="{{ old('kode_produk') }}"
+                                class="w-full rounded-xl border border-gray-200 p-3 text-sm outline-none focus:border-brand-500 focus:ring-0 bg-gray-50"
+                                placeholder="Auto Generate" required>
+                            <p class="mt-1 text-xs text-gray-400">*Bisa diedit manual jika tidak ingin auto-generate</p>
+                            @error('kode_produk')
+                                <div class="mt-1 text-xs text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
-                    {{-- NAMA PRODUK --}}
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Nama Produk</label>
-                        <input type="text" name="nama_produk" id="nama_produk"
-                            value="{{ old('nama_produk') }}"
-                            placeholder="Contoh: Katun Jepang"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                            required>
-                        @error('nama_produk')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="w-full">
+                            <label class="mb-2 block text-sm font-bold text-navy-700">Nama Produk</label>
+                            <input type="text" name="nama_produk" id="nama_produk" value="{{ old('nama_produk') }}"
+                                class="w-full rounded-xl border border-gray-200 p-3 text-sm outline-none focus:border-brand-500 focus:ring-0"
+                                placeholder="Contoh: Jas Hujan Premium" required>
+                            @error('nama_produk')
+                                <div class="mt-1 text-xs text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        
+                        <div class="w-full">
+                            <label class="mb-2 block text-sm font-bold text-navy-700">Warna Produk</label>
+                            <input type="text" name="warna" value="{{ old('warna') }}"
+                                class="w-full rounded-xl border border-gray-200 p-3 text-sm outline-none focus:border-brand-500 focus:ring-0"
+                                placeholder="Contoh: Hitam, Biru" required>
+                            @error('warna')
+                                <div class="mt-1 text-xs text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
-                    {{-- WARNA --}}
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Warna</label>
-                        <input type="text" name="warna" id="warna"
-                            value="{{ old('warna') }}"
-                            placeholder="Contoh: Merah"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                            required>
-                        @error('warna')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="w-full">
+                            <label class="mb-2 block text-sm font-bold text-navy-700">Jenis Logo</label>
+                            <select name="logo" class="w-full rounded-xl border border-gray-200 p-3 text-sm outline-none focus:border-brand-500 focus:ring-0" required>
+                                <option value="IBI" {{ old('logo') == 'IBI' ? 'selected' : '' }}>IBI</option>
+                                <option value="IDI" {{ old('logo') == 'IDI' ? 'selected' : '' }}>IDI</option>
+                            </select>
+                            @error('logo')
+                                <div class="mt-1 text-xs text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="w-full">
+                            <label class="mb-2 block text-sm font-bold text-navy-700">Stok Awal</label>
+                            <input type="number" name="stok_tersedia" value="{{ old('stok_tersedia', 0) }}" min="0"
+                                class="w-full rounded-xl border border-gray-200 p-3 text-sm outline-none focus:border-brand-500 focus:ring-0" required>
+                            @error('stok_tersedia')
+                                <div class="mt-1 text-xs text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
-                    {{-- LOGO (Dropdown berdasarkan Enum) --}}
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Pilih Logo</label>
-                        <select name="logo" id="logo" 
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                            required>
-                            <option value="">-- Pilih Logo --</option>
-                            <option value="IBI" {{ old('logo') == 'IBI' ? 'selected' : '' }}>IBI</option>
-                            <option value="IDI" {{ old('logo') == 'IDI' ? 'selected' : '' }}>IDI</option>
-                        </select>
-                        @error('logo')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    {{-- STOK --}}
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Stok Tersedia</label>
-                        <input type="number" name="stok_tersedia"
-                            value="{{ old('stok_tersedia', 0) }}"
-                            min="0"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                            required>
-                        @error('stok_tersedia')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    {{-- TOMBOL --}}
-                    <div class="flex justify-end space-x-4">
-                        <a href="{{ route('products.index') }}"
-                            class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded shadow-lg transition duration-200">
+                    <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+                        <a href="{{ route('products.index') }}" class="rounded-xl bg-gray-100 px-6 py-3 text-sm font-medium text-navy-700 transition hover:bg-gray-200">
                             Batal
                         </a>
-                        <button type="submit"
-                            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-lg transition duration-200">
+                        <button type="submit" class="rounded-xl bg-brand-500 px-6 py-3 text-sm font-medium text-white transition hover:bg-brand-600 shadow-md shadow-brand-500/30">
                             Simpan Produk
                         </button>
                     </div>
-
                 </form>
             </div>
         </div>
     </div>
 
-    {{-- SCRIPT GENERATE KODE OTOMATIS --}}
+    @push('page-js')
     <script>
-        function generateKodeProduk() {
-            const nama = document.getElementById('nama_produk').value.trim();
-            const warna = document.getElementById('warna').value.trim();
-            const logo = document.getElementById('logo').value;
-
-            // Pastikan panjang nama minimal 4 karakter agar huruf ke-3 dan ke-4 tersedia
-            if (nama.length >= 4 && warna.length >= 1 && logo !== "") {
-                
-                const h1 = nama.substring(0, 1);      // Huruf ke-1
-                const h3 = nama.substring(2, 3);      // Huruf ke-3
-                const h4 = nama.substring(3, 4);      // Huruf ke-4
-                const hLast = nama.slice(-1);         // Huruf Terakhir
-                
-                const kodeWarna = warna.substring(0, 1); // Huruf ke-1 Warna
-                const kodeLogo = (logo === 'IBI') ? '01' : '02';
-
-                const hasil = `${h1}${h3}${h4}${hLast}-${kodeWarna}-${kodeLogo}`;
-                document.getElementById('kode_produk').value = hasil.toUpperCase();
-            } else {
-                document.getElementById('kode_produk').value = '';
-            }
-        }
-
-        // Jalankan fungsi setiap kali ada input
-        document.getElementById('nama_produk').addEventListener('input', generateKodeProduk);
-        document.getElementById('warna').addEventListener('input', generateKodeProduk);
-        document.getElementById('logo').addEventListener('change', generateKodeProduk);
+        document.addEventListener('DOMContentLoaded', function () {
+            const inputNama = document.getElementById('nama_produk');
+            const inputKode = document.getElementById('kode_produk');
+            
+            // Auto generate kode produk saat nama produk diketik
+            inputNama.addEventListener('input', function() {
+                // Jangan override jika user sudah mengedit manual (opsional, tp di case ini kita sll override klo diubah dr nama)
+                const nama = this.value;
+                if (nama.length > 0) {
+                    const singkatan = nama.split(' ').map(word => word.charAt(0)).join('').toUpperCase();
+                    const randomNum = Math.floor(100 + Math.random() * 900); // 3 digit angka random
+                    inputKode.value = 'PRD-' + singkatan + '-' + randomNum;
+                } else {
+                    inputKode.value = '';
+                }
+            });
+        });
     </script>
+    @endpush
 </x-app-layout>

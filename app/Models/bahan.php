@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\dashboard;
+use Illuminate\Database\Eloquent\Dashboard;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 
-class bahan extends Model
+class Bahan extends Model
 {
     protected $fillable = [
         'kode_bahan',

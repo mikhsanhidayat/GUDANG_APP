@@ -51,7 +51,8 @@ Route::resource('users', UserController::class);
     Route::get('/laporan/produk', [LaporanController::class, 'produk'])->name('laporan.produk');
     Route::get('/laporan/bahan', [LaporanController::class, 'bahan'])->name('laporan.bahan');
     
-   
+    // CHATBOT
+    Route::post('/chatbot/send', [\App\Http\Controllers\ChatbotController::class, 'sendMessage'])->name('chatbot.send');
 });
 
 

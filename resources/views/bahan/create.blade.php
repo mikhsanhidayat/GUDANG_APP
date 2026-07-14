@@ -1,129 +1,91 @@
 <x-app-layout>
-
-<div class="bg-[#2A446C] min-h-screen pl-56 pt-44 py-8">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="bg-white rounded-xl shadow-2xl p-8">
-
-            <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">
-                Tambah Bahan Baru
-            </h1>
-
-            <form action="{{ route('bahan.store') }}" method="POST" class="space-y-6">
-                @csrf
-
-                {{-- KODE BAHAN --}}
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">
-                        Kode Bahan
-                    </label>
-                    <input type="text" readonly name="kode_bahan" id="kode_bahan"
-                        value="{{ old('kode_bahan') }}"
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm
-                               focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                        required>
-                    @error('kode_bahan')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+    <div class="w-full flex justify-center">
+        <div class="w-full max-w-3xl">
+            <div class="horizon-card w-full p-8 mt-5">
+                <div class="flex items-center justify-between border-b border-gray-100 pb-4 mb-6">
+                    <h5 class="text-2xl font-bold text-navy-700">Tambah Bahan Baku Baru</h5>
                 </div>
 
-                {{-- NAMA BAHAN --}}
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">
-                        Nama Bahan
-                    </label>
-                    <input type="text" name="nama_bahan" id="nama_bahan"
-                        value="{{ old('nama_bahan') }}"
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm
-                               focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                        required>
-                    @error('nama_bahan')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+                <form action="{{ route('bahan.store') }}" method="POST" class="space-y-6">
+                    @csrf
+                    
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="w-full">
+                            <label class="mb-2 block text-sm font-bold text-navy-700">Kode Bahan</label>
+                            <input type="text" name="kode_bahan" id="kode_bahan" value="{{ old('kode_bahan') }}"
+                                class="w-full rounded-xl border border-gray-200 p-3 text-sm outline-none focus:border-brand-500 focus:ring-0 bg-gray-50"
+                                placeholder="Auto Generate" required>
+                            <p class="mt-1 text-xs text-gray-400">*Bisa diedit manual jika tidak ingin auto-generate</p>
+                            @error('kode_bahan')
+                                <div class="mt-1 text-xs text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
 
-                {{-- WARNA --}}
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">
-                        Warna
-                    </label>
-                    <input type="text" name="warna" id="warna"
-                        value="{{ old('warna') }}"
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm
-                               focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                        required>
-                    @error('warna')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="w-full">
+                            <label class="mb-2 block text-sm font-bold text-navy-700">Nama Bahan</label>
+                            <input type="text" name="nama_bahan" id="nama_bahan" value="{{ old('nama_bahan') }}"
+                                class="w-full rounded-xl border border-gray-200 p-3 text-sm outline-none focus:border-brand-500 focus:ring-0"
+                                placeholder="Contoh: Kain Parasut" required>
+                            @error('nama_bahan')
+                                <div class="mt-1 text-xs text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        
+                        <div class="w-full">
+                            <label class="mb-2 block text-sm font-bold text-navy-700">Warna</label>
+                            <input type="text" name="warna" value="{{ old('warna') }}"
+                                class="w-full rounded-xl border border-gray-200 p-3 text-sm outline-none focus:border-brand-500 focus:ring-0"
+                                placeholder="Contoh: Merah, Bening" required>
+                            @error('warna')
+                                <div class="mt-1 text-xs text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
 
-                {{-- STOK --}}
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">
-                        Stok Tersedia
-                    </label>
-                    <input type="number" name="stok_tersedia"
-                        value="{{ old('stok_tersedia', 0) }}"
-                        min="0"
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm
-                               focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                        required>
-                    @error('stok_tersedia')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="w-full">
+                            <label class="mb-2 block text-sm font-bold text-navy-700">Sisa Stok (Awal)</label>
+                            <input type="number" name="stok_tersedia" value="{{ old('stok_tersedia', 0) }}" min="0"
+                                class="w-full rounded-xl border border-gray-200 p-3 text-sm outline-none focus:border-brand-500 focus:ring-0" required>
+                            @error('stok_tersedia')
+                                <div class="mt-1 text-xs text-red-500">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
 
-                {{-- SUPPLIER --}}
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">
-                        Nama Supplier
-                    </label>
-                    <input type="text" name="supplier"
-                        value="{{ old('supplier') }}"
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm
-                               focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                        required>
-                    @error('supplier')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                {{-- TOMBOL --}}
-                <div class="flex justify-end space-x-4">
-                    <a href="{{ route('bahan.index') }}"
-                        class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded shadow-lg">
-                        Batal
-                    </a>
-
-                    <button type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-lg">
-                        Simpan Bahan
-                    </button>
-                </div>
-
-            </form>
+                    <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+                        <a href="{{ route('bahan.index') }}" class="rounded-xl bg-gray-100 px-6 py-3 text-sm font-medium text-navy-700 transition hover:bg-gray-200">
+                            Batal
+                        </a>
+                        <button type="submit" class="rounded-xl bg-brand-500 px-6 py-3 text-sm font-medium text-white transition hover:bg-brand-600 shadow-md shadow-brand-500/30">
+                            Simpan Bahan
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
-{{-- ================= SCRIPT KODE BAHAN OTOMATIS ================= --}}
-<script>
-    function generateKodeBahan() {
-        const nama = document.getElementById('nama_bahan').value.trim();
-        const warna = document.getElementById('warna').value.trim();
-
-        if (nama.length < 3 || warna.length < 1) return;
-
-        const kodeNama = nama.substring(0, 3).toUpperCase();
-        const kodeWarna = warna.charAt(0).toUpperCase();
-
-        document.getElementById('kode_bahan').value = `${kodeNama}-${kodeWarna}`;
-    }
-
-    document.getElementById('nama_bahan').addEventListener('input', generateKodeBahan);
-    document.getElementById('warna').addEventListener('input', generateKodeBahan);
-</script>
-
+    @push('page-js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const inputNama = document.getElementById('nama_bahan');
+            const inputKode = document.getElementById('kode_bahan');
+            
+            // Auto generate kode bahan saat nama bahan diketik
+            inputNama.addEventListener('input', function() {
+                const nama = this.value;
+                if (nama.length > 0) {
+                    const singkatan = nama.split(' ').map(word => word.charAt(0)).join('').toUpperCase();
+                    const randomNum = Math.floor(100 + Math.random() * 900); // 3 digit angka random
+                    inputKode.value = 'BHN-' + singkatan + '-' + randomNum;
+                } else {
+                    inputKode.value = '';
+                }
+            });
+        });
+    </script>
+    @endpush
 </x-app-layout>
-
-
-

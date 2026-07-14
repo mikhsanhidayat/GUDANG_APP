@@ -197,7 +197,7 @@
         </div>
     </div>
 
-    <main class="ms-sm-auto px-md-4" style="margin-left: 280px;">
+    <main class="ms-sm-auto px-md-4" style="margin-left: 280px;">a
         @yield('content')
     </main>
 

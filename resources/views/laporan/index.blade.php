@@ -1,134 +1,147 @@
 <x-app-layout>
-    <div class="bg-[#2A446C] min-h-screen pl-72 pt-40 pb-20">
-        <div class="flex justify-start pl-[200px] text-3xl mb-8 text-white font-bold">
-            Laporan
+    <div class="mt-3">
+        <h4 class="text-xl font-bold text-navy-700 mb-5">Laporan / <span class="text-gray-500 font-medium">Ringkasan</span></h4>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+            <a href="{{ route('laporan.produk') }}" class="horizon-card w-full p-6 transition-transform hover:-translate-y-1">
+                <div class="flex items-center">
+                    <div class="rounded-full bg-lightPrimary p-3 mr-4">
+                        <i class="ti ti-box text-2xl text-brand-500"></i>
+                    </div>
+                    <div>
+                        <h5 class="text-lg font-bold text-navy-700">Laporan Produk Jadi</h5>
+                        <p class="text-sm font-medium text-gray-500">Laporan untuk produk masuk, keluar, dan retur.</p>
+                    </div>
+                </div>
+            </a>
+            <a href="{{ route('laporan.bahan') }}" class="horizon-card w-full p-6 transition-transform hover:-translate-y-1">
+                <div class="flex items-center">
+                    <div class="rounded-full bg-lightPrimary p-3 mr-4">
+                        <i class="ti ti-stack text-2xl text-brand-500"></i>
+                    </div>
+                    <div>
+                        <h5 class="text-lg font-bold text-navy-700">Laporan Bahan Baku</h5>
+                        <p class="text-sm font-medium text-gray-500">Laporan untuk bahan masuk, keluar, dan retur.</p>
+                    </div>
+                </div>
+            </a>
         </div>
-
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
-
-            {{-- MENU UTAMA LAPORAN --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <a href="{{ route('laporan.produk') }}" class="bg-white rounded-xl shadow p-6 hover:shadow-lg transition">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Laporan Produk Jadi</h2>
-                    <p class="text-gray-600">Laporan untuk produk masuk, keluar, dan retur.</p>
-                </a>
-
-                <a href="{{ route('laporan.bahan') }}" class="bg-white rounded-xl shadow p-6 hover:shadow-lg transition">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Laporan Bahan Baku</h2>
-                    <p class="text-gray-600">Laporan untuk bahan masuk, keluar, dan retur.</p>
-                </a>
+        
+        <div class="horizon-card w-full p-6">
+            <div class="flex flex-col sm:flex-row justify-between items-center border-b border-gray-100 pb-4 mb-6 gap-4">
+                <h5 class="text-xl font-bold text-navy-700">Ringkasan Statistik {{ $tahunDipilih }}</h5>
+                <form action="{{ route('laporan.index') }}" method="GET" class="flex items-center gap-3">
+                    <label for="tahun" class="text-sm font-bold text-navy-700 whitespace-nowrap">Pilih Tahun:</label>
+                    <div class="relative">
+                        <select name="tahun" id="tahun" onchange="this.form.submit()" class="block w-full appearance-none rounded-xl border border-gray-200 bg-white px-4 py-2 pr-8 text-sm font-medium text-navy-700 outline-none focus:border-brand-500 focus:ring-0">
+                            @foreach($daftarTahun as $th)
+                                <option value="{{ $th }}" {{ $tahunDipilih == $th ? 'selected' : '' }}>{{ $th }}</option>
+                            @endforeach
+                            @if($daftarTahun->isEmpty())
+                                <option value="{{ date('Y') }}" selected>{{ date('Y') }}</option>
+                            @endif
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                            <i class="ti ti-chevron-down"></i>
+                        </div>
+                    </div>
+                </form>
             </div>
 
-            {{-- FORM FILTER TAHUN --}}
-<div class="flex justify-end mb-6">
-    <form action="{{ route('laporan.index') }}" method="GET" class="flex items-center gap-2 bg-white p-2 rounded-lg shadow">
-        <label for="tahun" class="text-sm font-bold text-gray-600 px-2">Pilih Tahun:</label>
-        <select name="tahun" id="tahun" onchange="this.form.submit()" class="border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-            @foreach($daftarTahun as $th)
-                <option value="{{ $th }}" {{ $tahunDipilih == $th ? 'selected' : '' }}>{{ $th }}</option>
-            @endforeach
-            {{-- Jika database kosong, minimal tampilkan tahun sekarang --}}
-            @if($daftarTahun->isEmpty())
-                <option value="{{ date('Y') }}" selected>{{ date('Y') }}</option>
-            @endif
-        </select>
-    </form>
-</div>
-
-{{-- RINGKASAN STATISTIK ANGKA (Variabel tetap sama) --}}
-...
-
-            {{-- RINGKASAN STATISTIK ANGKA --}}
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div class="bg-white p-4 rounded-xl shadow-md border-l-4 border-green-500">
-                    <p class="text-xs text-gray-500 font-bold uppercase">Produk Masuk</p>
-                    <p class="text-xl font-bold">{{ number_format($summary['p_masuk']) }} <span
-                            class="text-sm font-normal text-gray-400">Unit</span></p>
-                </div>
-                <div class="bg-white p-4 rounded-xl shadow-md border-l-4 border-red-500">
-                    <p class="text-xs text-gray-500 font-bold uppercase">Produk Keluar</p>
-                    <p class="text-xl font-bold">{{ number_format($summary['p_keluar']) }} <span
-                            class="text-sm font-normal text-gray-400">Unit</span></p>
-                </div>
-                <div class="bg-white p-4 rounded-xl shadow-md border-l-4 border-blue-500">
-                    <p class="text-xs text-gray-500 font-bold uppercase">Bahan Masuk</p>
-                    <p class="text-xl font-bold">{{ number_format($summary['b_masuk']) }} <span
-                            class="text-sm font-normal text-gray-400">Unit</span></p>
-                </div>
-                <div class="bg-white p-4 rounded-xl shadow-md border-l-4 border-orange-500">
-                    <p class="text-xs text-gray-500 font-bold uppercase">Bahan Keluar</p>
-                    <p class="text-xl font-bold">{{ number_format($summary['b_keluar']) }} <span
-                            class="text-sm font-normal text-gray-400">Unit</span></p>
-                </div>
-            </div>
-            {{-- BAR CHART (Gaya Card Success) --}}
-            <div class="card bg-white rounded-xl shadow-xl overflow-hidden border-t-4 border-green-500">
-                {{-- Header Card --}}
-                <div class="flex items-center justify-between px-6 py-3 border-b border-gray-100">
-                    <h3 class="text-lg font-bold text-gray-700 flex items-center gap-2">
-                        <i class="fas fa-chart-bar text-green-600"></i>
-                        Statistik Perbandingan Produk & Bahan
-                    </h3>
-                    <div class="flex gap-2 text-gray-400">
-                        <button class="hover:text-gray-600"><i class="fas fa-minus"></i></button>
-                        <button class="hover:text-red-500"><i class="fas fa-times"></i></button>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+                <!-- P Masuk -->
+                <div class="rounded-[20px] border border-horizonGreen-500/20 bg-green-50/30 p-5 shadow-sm">
+                    <p class="text-sm font-medium text-gray-600 mb-1">Produk Masuk</p>
+                    <div class="flex items-end gap-2">
+                        <h4 class="text-2xl font-bold text-navy-700">{{ number_format($summary['p_masuk']) }}</h4>
+                        <span class="text-sm font-bold text-horizonGreen-500 mb-1">Unit</span>
                     </div>
                 </div>
-
-                {{-- Body Card --}}
-                <div class="p-6">
-                    <div class="relative" style="height: 350px;">
-                        <canvas id="barChartCombined"></canvas>
+                <!-- P Keluar -->
+                <div class="rounded-[20px] border border-horizonRed-500/20 bg-red-50/30 p-5 shadow-sm">
+                    <p class="text-sm font-medium text-gray-600 mb-1">Produk Keluar</p>
+                    <div class="flex items-end gap-2">
+                        <h4 class="text-2xl font-bold text-navy-700">{{ number_format($summary['p_keluar']) }}</h4>
+                        <span class="text-sm font-bold text-horizonRed-500 mb-1">Unit</span>
+                    </div>
+                </div>
+                <!-- B Masuk -->
+                <div class="rounded-[20px] border border-blue-500/20 bg-blue-50/30 p-5 shadow-sm">
+                    <p class="text-sm font-medium text-gray-600 mb-1">Bahan Masuk</p>
+                    <div class="flex items-end gap-2">
+                        <h4 class="text-2xl font-bold text-navy-700">{{ number_format($summary['b_masuk']) }}</h4>
+                        <span class="text-sm font-bold text-blue-500 mb-1">Unit</span>
+                    </div>
+                </div>
+                <!-- B Keluar -->
+                <div class="rounded-[20px] border border-horizonOrange-500/20 bg-orange-50/30 p-5 shadow-sm">
+                    <p class="text-sm font-medium text-gray-600 mb-1">Bahan Keluar</p>
+                    <div class="flex items-end gap-2">
+                        <h4 class="text-2xl font-bold text-navy-700">{{ number_format($summary['b_keluar']) }}</h4>
+                        <span class="text-sm font-bold text-horizonOrange-500 mb-1">Unit</span>
                     </div>
                 </div>
             </div>
 
+            <div class="w-full">
+                <h5 class="text-lg font-bold text-navy-700 mb-4 flex items-center gap-2">
+                    <i class="ti ti-chart-bar text-brand-500"></i> Statistik Perbandingan Produk & Bahan
+                </h5>
+                <div style="height: 350px;">
+                    <canvas id="barChartCombined"></canvas>
+                </div>
+            </div>
         </div>
     </div>
 
-    {{-- Script Chart.js --}}
+    @push('page-js')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const ctx = document.getElementById('barChartCombined').getContext('2d');
-        
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: @json($labels), // Mengambil nama bulan otomatis
-                datasets: [
-                    {
-                        label: 'Produk Masuk',
-                        backgroundColor: '#10B981',
-                        data: @json($dataProdukMasuk),
-                        borderRadius: 5
-                    },
-                    {
-                        label: 'Produk Keluar',
-                        backgroundColor: '#EF4444',
-                        data: @json($dataProdukKeluar),
-                        borderRadius: 5
-                    },
-                    {
-                        label: 'Bahan Masuk',
-                        backgroundColor: '#3B82F6',
-                        data: @json($dataBahanMasuk),
-                        borderRadius: 5
-                    },
-                    {
-                        label: 'Bahan Keluar',
-                        backgroundColor: '#F97316',
-                        data: @json($dataBahanKeluar),
-                        borderRadius: 5
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('barChartCombined').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: @json($labels),
+                    datasets: [
+                        {
+                            label: 'Produk Masuk',
+                            backgroundColor: '#01B574', // horizonGreen-500
+                            data: @json($dataProdukMasuk),
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Produk Keluar',
+                            backgroundColor: '#E31A1A', // horizonRed-500
+                            data: @json($dataProdukKeluar),
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Bahan Masuk',
+                            backgroundColor: '#3b82f6', // blue-500
+                            data: @json($dataBahanMasuk),
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Bahan Keluar',
+                            backgroundColor: '#FFB547', // horizonOrange-500
+                            data: @json($dataBahanKeluar),
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                // ... sisa options tetap sama ...
-            }
+                }
+            });
         });
-    });
-</script>
+    </script>
+    @endpush
 </x-app-layout>
